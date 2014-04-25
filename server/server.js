@@ -23,8 +23,12 @@ var app = express()
         cookie: {httpOnly: true}
     }))
     .use(require('morgan')())
-    .get('/user',restAPI.users)
-    .use(express.static('./client'));
-http.createServer(app).listen(config.port, function() {
-    console.log('Http server running at http://localhost:'+config.port);
+    .get('/user', restAPI.users)
+    .use(express.static('./client'))
+    .all('/*', function (req, res, next) {
+        // Just send the index.html for other files to support HTML5Mode
+        res.sendfile('./client/index.html');
+    });
+http.createServer(app).listen(config.port, function () {
+    console.log('Http server running at http://localhost:' + config.port);
 });
